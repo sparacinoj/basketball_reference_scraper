@@ -5,7 +5,11 @@ from bs4 import BeautifulSoup
 try:
     from constants import TEAM_TO_TEAM_ABBR
 except:
-    from basketball_reference_scraper.constants import TEAM_TO_TEAM_ABBR
+    try:
+        from basketball_reference_scraper.constants import TEAM_TO_TEAM_ABBR
+    except:
+        from basketball_reference_scraper.basketball_reference_scraper.constants import TEAM_TO_TEAM_ABBR
+
 
 def get_injury_report():
     r = get(f'https://widgets.sports-reference.com/wg.fcgi?css=1&site=bbr&url=%2Ffriv%2Finjuries.fcgi&div=div_injuries')

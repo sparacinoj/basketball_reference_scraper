@@ -46,15 +46,27 @@ def create_last_name_part_of_suffix(potential_last_names):
 """
 def get_player_suffix(name):
     normalized_name = unidecode.unidecode(unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode("utf-8"))
-    if normalized_name == 'Metta World Peace' :
+    if normalized_name == 'Metta World Peace':
         suffix = '/players/a/artesro01.html'
+    elif normalized_name == 'Maxi Kleber':
+        suffix = '/players/k/klebima01.html'
+    elif normalized_name == "Brandon Williams":
+        suffix = '/players/w/willibr03.html'
+    elif normalized_name == "Kevin Porter Jr.":
+        suffix = '/players/p/porteke02.html'
+    elif normalized_name == "Kenyon Martin Jr.":
+        suffix = '/players/m/martike04.html'
+    elif normalized_name == "Nicolas Claxton":
+        suffix = '/players/c/claxtni01.html'
+    elif normalized_name == "Jaren Jackson Jr.":
+        suffix = '/players/j/jacksja02.html'
     else:
         split_normalized_name = normalized_name.split(' ')
         if len(split_normalized_name) < 2:
             return None
         initial = normalized_name.split(' ')[1][0].lower()
         all_names = name.split(' ')
-        first_name_part = unidecode.unidecode(all_names[0][:2].lower())
+        first_name_part = unidecode.unidecode("".join(filter(str.isalnum, all_names[0]))[:2].lower())
         first_name = all_names[0]
         other_names = all_names[1:]
         other_names_search = other_names
@@ -64,6 +76,9 @@ def get_player_suffix(name):
     while player_r.status_code == 404:
         other_names_search.pop(0)
         last_name_part = create_last_name_part_of_suffix(other_names_search)
+        if len(last_name_part) == 0:
+            print(f'ERROR: could not find match for {name}')
+            return None
         initial = last_name_part[0].lower()
         suffix = '/players/'+initial+'/'+last_name_part+first_name_part+'01.html'
         player_r = get(f'https://www.basketball-reference.com{suffix}')

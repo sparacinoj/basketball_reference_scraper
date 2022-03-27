@@ -4,7 +4,7 @@ import unidecode, os, sys, unicodedata
     Bounded levenshtein algorithm credited to user amirouche on stackoverflow.
     Implementation borrowed from https://stackoverflow.com/questions/59686989/levenshtein-distance-with-bound-limit
 """
-def levenshtein(s1, s2, maximum):  
+def levenshtein(s1, s2, maximum):
     if len(s1) > len(s2):
         s1, s2 = s2, s1
 
@@ -31,7 +31,7 @@ def lookup(player, ask_matches = True):
     path = os.path.join(os.path.dirname(__file__), 'br_names.txt')
     normalized = unidecode.unidecode(player)
     matches = []
-    
+
     with open(path) as file:
         Lines = file.readlines()
         for line in Lines:
@@ -49,11 +49,14 @@ def lookup(player, ask_matches = True):
         otherwise, return list of likely candidates and allow
         the user to confirm specifiy their selection.
     """
-    if len(matches) == 1 or ask_matches == False:
+    if len(matches) == 1 or not ask_matches:
         matches.sort(key=lambda tup: tup[1])
         if ask_matches:
             print("You searched for \"{}\"\n{} result found.\n{}".format(player, len(matches), matches[0][0]))
             print("Results for {}:\n".format(matches[0][0]))
+        else:
+            if len(matches) > 1:
+                print(f'WARNING: Found {len(matches)} for name {player}, returning first result: {matches[0][0]}')
         return matches[0][0]
 
     elif len(matches) > 1:
@@ -62,9 +65,9 @@ def lookup(player, ask_matches = True):
         i = 0
         return matches[0][0]
         for match in matches:
-            print("{}: {}".format(i, match[0])) 
-            i += 1           
-                
+            print("{}: {}".format(i, match[0]))
+            i += 1
+
         selection = int(input("Pick one: "))
         print("Results for {}:\n".format(matches[selection][0]))
         return matches[selection][0]
@@ -72,7 +75,7 @@ def lookup(player, ask_matches = True):
     elif len(matches) < 1:
         print("You searched for \"{}\"\n{} results found.".format(player, len(matches)))
         return ""
-        
+
     else:
         print("You searched for \"{}\"\n{} result found.\n{}".format(player, len(matches), matches[0][0]))
         print("Results for {}:\n".format(matches[0][0]))

@@ -6,8 +6,12 @@ try:
     from utils import get_player_suffix
     from lookup import lookup
 except:
-    from basketball_reference_scraper.utils import get_player_suffix
-    from basketball_reference_scraper.lookup import lookup
+    try:
+        from basketball_reference_scraper.utils import get_player_suffix
+        from basketball_reference_scraper.lookup import lookup
+    except:
+        from basketball_reference_scraper.basketball_reference_scraper.utils import get_player_suffix
+        from basketball_reference_scraper.basketball_reference_scraper.lookup import lookup
 
 def get_stats(_name, stat_type='PER_GAME', playoffs=False, career=False, ask_matches = True):
     name = lookup(_name, ask_matches)
@@ -44,9 +48,18 @@ def get_stats(_name, stat_type='PER_GAME', playoffs=False, career=False, ask_mat
         df = df.reset_index().drop('index', axis=1)
         return df
 
-def get_game_logs(_name, start_date, end_date, playoffs=False, ask_matches=True):
-    name = lookup(_name, ask_matches)
-    suffix = get_player_suffix(name).replace('/', '%2F').replace('.html', '')
+
+def get_game_logs(_name, start_date, end_date, playoffs=False, ask_matches=True, bypass_match=False):
+    if bypass_match:
+        name = _name
+    else:
+        name = lookup(_name, ask_matches)
+    presuffix = get_player_suffix(name)
+    if presuffix is None:
+        print(f'ERROR: could not find player suffix for {_name}')
+        return None
+    else:
+        suffix = presuffix.replace('/', '%2F').replace('.html', '')
     start_date_str = start_date
     end_date_str = end_date
     start_date = pd.to_datetime(start_date)
@@ -75,10 +88,11 @@ def get_game_logs(_name, start_date, end_date, playoffs=False, ask_matches=True)
                 for index, row in df.iterrows():
                     if row['GS']!=1 and row['GS']!='1':
                         continue
-                    active_df = active_df.append(row)
+                    active_df = pd.concat([active_df, row.to_frame().T], ignore_index=True, sort=False)
                 if final_df is None:
                     final_df = pd.DataFrame(columns=list(active_df.columns))
-                final_df = final_df.append(active_df)
+                final_df = pd.concat([final_df, active_df], axis=0, ignore_index=True, sort=False)
+                # final_df = final_df.append(active_df)
     return final_df
 
 def get_player_headshot(_name, ask_matches=True):
