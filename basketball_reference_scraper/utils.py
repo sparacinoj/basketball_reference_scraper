@@ -68,6 +68,8 @@ def get_player_suffix(name):
         suffix = '/players/c/claxtni01.html'
     elif normalized_name == "Jaren Jackson Jr.":
         suffix = '/players/j/jacksja02.html'
+    elif normalized_name == "Clint Capela":
+        suffix = '/players/c/capelca01.html'
     else:
         split_normalized_name = normalized_name.split(' ')
         if len(split_normalized_name) < 2:
