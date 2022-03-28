@@ -29,6 +29,14 @@ def create_last_name_part_of_suffix(potential_last_names):
     else:
         return last_names[:5].lower()
 
+
+def filter_name(x):
+    return unidecode.unidecode("".join(filter(str.isalnum, x)).lower())
+
+
+def normalize_name(x):
+    return unidecode.unidecode(unicodedata.normalize('NFD', x).encode('ascii', 'ignore').decode("utf-8"))
+
 """
     Amended version of the original suffix function--it now creates all
     suffixes in place.
@@ -45,7 +53,7 @@ def create_last_name_part_of_suffix(potential_last_names):
     This implementation dropped player lookup fail count from 306 to 35 to 0.
 """
 def get_player_suffix(name):
-    normalized_name = unidecode.unidecode(unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode("utf-8"))
+    normalized_name = normalize_name(name)
     if normalized_name == 'Metta World Peace':
         suffix = '/players/a/artesro01.html'
     elif normalized_name == 'Maxi Kleber':
@@ -66,9 +74,10 @@ def get_player_suffix(name):
             return None
         initial = normalized_name.split(' ')[1][0].lower()
         all_names = name.split(' ')
-        first_name_part = unidecode.unidecode("".join(filter(str.isalnum, all_names[0]))[:2].lower())
+        first_name_part = filter_name(all_names[0])[:2]
         first_name = all_names[0]
         other_names = all_names[1:]
+        other_names = [filter_name(x) for x in other_names]
         other_names_search = other_names
         last_name_part = create_last_name_part_of_suffix(other_names)
         suffix = '/players/'+initial+'/'+last_name_part+first_name_part+'01.html'

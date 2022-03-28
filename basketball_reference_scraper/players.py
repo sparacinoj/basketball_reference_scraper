@@ -7,7 +7,7 @@ try:
     from lookup import lookup
 except:
     try:
-        from basketball_reference_scraper.utils import get_player_suffix
+        from utils import get_player_suffix
         from basketball_reference_scraper.lookup import lookup
     except:
         from basketball_reference_scraper.basketball_reference_scraper.utils import get_player_suffix

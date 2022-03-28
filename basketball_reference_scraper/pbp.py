@@ -1,12 +1,11 @@
 import pandas as pd
 from requests import get
 from bs4 import BeautifulSoup
-from datetime import datetime
 
 try:
     from utils import get_game_suffix
 except:
-    from basketball_reference_scraper.utils import get_game_suffix
+    from utils import get_game_suffix
 
 def get_pbp_helper(suffix):
     selector = f'#pbp'

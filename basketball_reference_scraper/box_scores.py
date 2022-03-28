@@ -9,7 +9,7 @@ try:
     from utils import get_game_suffix, remove_accents
     from players import get_stats 
 except:
-    from basketball_reference_scraper.utils import get_game_suffix, remove_accents
+    from utils import get_game_suffix, remove_accents
     from basketball_reference_scraper.players import get_stats
 
 def get_box_scores(date, team1, team2, period='GAME', stat_type='BASIC'):

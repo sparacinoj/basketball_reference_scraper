@@ -7,7 +7,7 @@ try:
     from utils import remove_accents
 except:
     from basketball_reference_scraper.constants import TEAM_TO_TEAM_ABBR, TEAM_SETS
-    from basketball_reference_scraper.utils import remove_accents
+    from utils import remove_accents
 
 
 def get_roster(team, season_end_year):

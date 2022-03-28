@@ -1,13 +1,12 @@
 import pandas as pd
 from requests import get
 from bs4 import BeautifulSoup
-from datetime import datetime
 import re
 
 try:
     from utils import get_game_suffix
 except:
-    from basketball_reference_scraper.utils import get_game_suffix
+    from utils import get_game_suffix
 
 def get_location(s):
     l = s.split(';')
